@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { flushSync } from "react-dom";
 
 import { cn } from "@/lib/utils";
 
@@ -166,6 +165,7 @@ export const AnimatedThemeToggler = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const isTransitioningRef = useRef(false);
   const activeAnimRef = useRef<Animation | null>(null);
+  const activeTransitionRef = useRef<{ skipTransition?: () => void } | null>(null);
 
   const cancelAnim = useCallback(() => {
     activeAnimRef.current?.cancel();
@@ -203,12 +203,23 @@ export const AnimatedThemeToggler = ({
 
   const toggleTheme = useCallback(() => {
     const button = buttonRef.current;
-    if (
-      !button ||
-      isTransitioningRef.current ||
-      document.documentElement.dataset.magicuiThemeVt === "active"
-    )
-      return;
+    if (!button) return;
+
+    // If an animation is already running when clicked again, cleanly cancel the previous one
+    if (isTransitioningRef.current || document.documentElement.dataset.magicuiThemeVt === "active") {
+      cancelAnim();
+      if (activeTransitionRef.current?.skipTransition) {
+        try {
+          activeTransitionRef.current.skipTransition();
+        } catch {}
+      }
+      activeTransitionRef.current = null;
+      isTransitioningRef.current = false;
+      const root = document.documentElement;
+      delete root.dataset.magicuiThemeVt;
+      root.style.removeProperty("--magicui-theme-toggle-vt-duration");
+      root.style.removeProperty("--magicui-theme-vt-clip-from");
+    }
 
     // innerWidth/innerHeight (not visualViewport): percentages must resolve
     // against the snapshot reference box, which includes classic scrollbars.
@@ -233,8 +244,7 @@ export const AnimatedThemeToggler = ({
 
     const applyTheme = () => {
       const newTheme = !isDark;
-      // Always toggle the class synchronously so the View Transitions API
-      // snapshots the new theme inside the startViewTransition callback.
+      // Toggle class synchronously on documentElement
       document.documentElement.classList.toggle("dark");
       if (isControlled) {
         onThemeChange?.(newTheme ? "dark" : "light");
@@ -269,6 +279,7 @@ export const AnimatedThemeToggler = ({
     root.style.setProperty("--magicui-theme-vt-clip-from", clipPath[0]);
     const cleanup = () => {
       isTransitioningRef.current = false;
+      activeTransitionRef.current = null;
       delete root.dataset.magicuiThemeVt;
       root.style.removeProperty("--magicui-theme-toggle-vt-duration");
       root.style.removeProperty("--magicui-theme-vt-clip-from");
@@ -277,8 +288,9 @@ export const AnimatedThemeToggler = ({
 
     isTransitioningRef.current = true;
     const transition = document.startViewTransition(() => {
-      flushSync(applyTheme);
+      applyTheme();
     });
+    activeTransitionRef.current = transition;
     if (typeof transition?.finished?.finally === "function") {
       transition.finished.finally(cleanup).catch(() => {});
     } else {

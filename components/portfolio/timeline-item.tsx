@@ -2,19 +2,9 @@
 
 import React from "react";
 import { motion } from "motion/react";
-import { LucideIcon } from "lucide-react";
+import type { TimelineEntry } from "@/data/experience";
 
-export interface TimelineEntry {
-  title: string;
-  subtitle: string;
-  period: string;
-  badge?: string;
-  bullets?: string[];
-  description?: string;
-  icon?: LucideIcon;
-  iconText?: string;
-  href?: string;
-}
+export type { TimelineEntry };
 
 export function TimelineItem({ entry, index }: { entry: TimelineEntry; index: number }) {
   const Icon = entry.icon;

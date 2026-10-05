@@ -5,6 +5,7 @@ import { ExternalLink, Globe } from "lucide-react";
 import { GithubIcon } from "./icons";
 import { LaptopMockup } from "./laptop-mockup";
 import { Project } from "@/data/projects";
+import { Spotlight } from "@/components/core/spotlight";
 import {
   MorphingDialog,
   MorphingDialogTrigger,
@@ -26,7 +27,8 @@ export function ProjectCard({
   project,
   onMouseEnter,
   onMouseLeave,
-}: ProjectCardProps) {
+  onClick,
+}: ProjectCardProps & { onClick?: () => void }) {
   return (
     <MorphingDialog
       transition={{
@@ -35,17 +37,22 @@ export function ProjectCard({
         duration: 0.28,
       }}
     >
-      {/* Collapsed Card Trigger */}
+      {/* Collapsed Card Trigger with Spotlight Border */}
       <MorphingDialogTrigger
         style={{ borderRadius: "20px" }}
-        className="group relative w-full text-left overflow-hidden border border-[#E5E5E7] dark:border-[#27272A] bg-[#FFFFFF] dark:bg-[#141416] hover:border-neutral-400 dark:hover:border-neutral-600 shadow-sm transition-colors duration-200"
+        className="group relative w-full text-left overflow-hidden rounded-[20px] bg-zinc-300/40 dark:bg-zinc-700/40 p-[1px] shadow-sm transition-colors duration-200"
       >
+        <Spotlight
+          className="from-blue-600 via-blue-500 to-blue-400 blur-2xl dark:from-blue-200 dark:via-blue-300 dark:to-blue-400"
+          size={220}
+          springOptions={{ stiffness: 600, damping: 30 }}
+        />
         <div
           data-project-card="true"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onClick={onMouseLeave}
-          className="w-full p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-6"
+          className="relative w-full h-full rounded-[19px] bg-[#FFFFFF] dark:bg-[#141416] p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-6"
         >
           {/* Left Column: Clean Title, Subtitle, and Link Pill */}
           <div className="flex flex-col items-start justify-center flex-1 min-w-0 w-full sm:w-auto">

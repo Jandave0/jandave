@@ -26,7 +26,7 @@ export const profileData: ProfileData = {
   phone: "09272056612",
   phoneDisplay: "+63 927 205 6612",
   aboutParagraphs: [
-    "I am a third-year Information Technology student at the Polytechnic University of the Philippines (PUP Lopez Campus) specializing in full-stack web development and cross-platform mobile applications. I design and engineer end-to-end digital products from responsive, accessible web interfaces in Next.js and React to fluid mobile experiences with React Native.",
+    "I am a IT student at the Polytechnic University of the Philippines (PUP Lopez Campus) specializing in full-stack web development and cross-platform mobile applications. I design and engineer end-to-end digital products from responsive, accessible web interfaces in Next.js and React to fluid mobile experiences with React Native.",
     "My development workflow focuses on clean component architecture, intuitive UI interactions, and robust backend integrations with modern databases, ORMs, and REST APIs. I combine deliberate software engineering principles with AI-augmented workflows to rapidly build and ship polished, production-grade applications across web and mobile platforms.",
   ],
   skills: [
@@ -49,8 +49,8 @@ export const profileData: ProfileData = {
     "Git",
     "GitHub",
     "Vercel",
-    "Gemini CLI",
+    "Claude Code",
     "Antigravity CLI",
-    "Context Engineering",
+    "AI Engineering",
   ],
 };

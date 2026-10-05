@@ -41,16 +41,15 @@ export function Cursor({
 }: CursorProps) {
   const [isVisible, setIsVisible] = useState(false);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const hasInitialized = useRef(false);
 
-  const defaultSpring =
-    springConfig?.bounce !== undefined
-      ? { bounce: 0.001, ...springConfig }
-      : {
-          damping: 30,
-          stiffness: 350,
-          mass: 0.5,
-          ...springConfig,
-        };
+  // Fast, responsive spring physics so the follower stays locked to the pointer
+  const defaultSpring = {
+    damping: 28,
+    stiffness: 450,
+    mass: 0.08,
+    ...springConfig,
+  };
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -60,86 +59,82 @@ export function Cursor({
 
   useEffect(() => {
     // Only activate cursor tracking on devices with a precision pointer (mouse/trackpad)
-    if (typeof window !== "undefined" && !window.matchMedia("(pointer: fine)").matches) {
+    if (typeof window === "undefined" || !window.matchMedia("(pointer: fine)").matches) {
       return;
     }
 
-    const parent = attachToParent ? cursorRef.current?.parentElement : window;
-    if (!parent) return;
-
-    let parentRect: DOMRect | null = null;
-    const updateRect = () => {
-      if (attachToParent && cursorRef.current?.parentElement) {
-        parentRect = cursorRef.current.parentElement.getBoundingClientRect();
-      }
-    };
-    updateRect();
+    const targetElement = attachToParent ? cursorRef.current?.parentElement : window;
+    if (!targetElement) return;
 
     const handleMouseMove = (e: Event) => {
       const mouseEvent = e as MouseEvent;
-      let x = mouseEvent.clientX;
-      let y = mouseEvent.clientY;
+      const x = mouseEvent.clientX;
+      const y = mouseEvent.clientY;
 
-      if (attachToParent) {
-        if (!parentRect) updateRect();
-        if (parentRect) {
-          x = mouseEvent.clientX - parentRect.left;
-          y = mouseEvent.clientY - parentRect.top;
-        }
+      if (!hasInitialized.current) {
+        // Snap immediately to mouse position without animating from offscreen
+        cursorX.jump(x);
+        cursorY.jump(y);
+        mouseX.set(x);
+        mouseY.set(y);
+        hasInitialized.current = true;
+      } else {
+        mouseX.set(x);
+        mouseY.set(y);
       }
 
-      mouseX.set(x);
-      mouseY.set(y);
-      onPositionChange?.(mouseEvent.clientX, mouseEvent.clientY);
+      setIsVisible(true);
+      onPositionChange?.(x, y);
     };
 
-    const handleMouseEnter = () => {
-      updateRect();
+    const handleMouseEnter = (e: Event) => {
+      const mouseEvent = e as MouseEvent;
+      if (mouseEvent.clientX && mouseEvent.clientY) {
+        cursorX.jump(mouseEvent.clientX);
+        cursorY.jump(mouseEvent.clientY);
+        mouseX.set(mouseEvent.clientX);
+        mouseY.set(mouseEvent.clientY);
+        hasInitialized.current = true;
+      }
       setIsVisible(true);
     };
 
     const handleMouseLeave = () => {
       setIsVisible(false);
+      hasInitialized.current = false;
     };
 
-    parent.addEventListener("mousemove", handleMouseMove, { passive: true });
-    parent.addEventListener("mouseenter", handleMouseEnter);
-    parent.addEventListener("mouseleave", handleMouseLeave);
-    window.addEventListener("resize", updateRect, { passive: true });
+    targetElement.addEventListener("mousemove", handleMouseMove, { passive: true });
+    targetElement.addEventListener("mouseenter", handleMouseEnter);
+    targetElement.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      parent.removeEventListener("mousemove", handleMouseMove);
-      parent.removeEventListener("mouseenter", handleMouseEnter);
-      parent.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("resize", updateRect);
+      targetElement.removeEventListener("mousemove", handleMouseMove);
+      targetElement.removeEventListener("mouseenter", handleMouseEnter);
+      targetElement.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [attachToParent, mouseX, mouseY, onPositionChange]);
+  }, [attachToParent, mouseX, mouseY, cursorX, cursorY, onPositionChange]);
 
   return (
-    <div
-      ref={cursorRef}
-      className={cn(
-        "pointer-events-none hidden md:block",
-        attachToParent ? "absolute inset-0 z-50 overflow-visible" : "fixed inset-0 z-50 pointer-events-none"
-      )}
-    >
+    <div ref={cursorRef} className="pointer-events-none hidden md:block" aria-hidden="true">
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial={variants?.initial || { scale: 0.5, opacity: 0 }}
-            animate={variants?.animate || { scale: 1, opacity: 1 }}
-            exit={variants?.exit || { scale: 0.5, opacity: 0 }}
-            transition={transition || { duration: 0.15, ease: "easeOut" }}
+            className="pointer-events-none fixed top-0 left-0 z-50 will-change-transform"
             style={{
-              position: attachToParent ? "absolute" : "fixed",
-              left: cursorX,
-              top: cursorY,
-              transform: "translate(-50%, -50%)",
-              pointerEvents: "none",
+              x: cursorX,
+              y: cursorY,
             }}
-            className={className}
           >
-            {children}
+            <motion.div
+              className={cn("-translate-x-1/2 -translate-y-1/2 pointer-events-none", className)}
+              initial={variants?.initial || { scale: 0.5, opacity: 0 }}
+              animate={variants?.animate || { scale: 1, opacity: 1 }}
+              exit={variants?.exit || { scale: 0.5, opacity: 0 }}
+              transition={transition || { duration: 0.15, ease: "easeOut" }}
+            >
+              {children}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

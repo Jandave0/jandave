@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Sun, Database } from "lucide-react";
+import { Sun } from "lucide-react";
 
 /* =========================================================================
    1. LAPTOP MOCKUP SCREENS (Vector UI for projects without static screenshots)
@@ -48,33 +48,6 @@ export function SolarXScreen() {
   );
 }
 
-export function CloudSuiteScreen() {
-  return (
-    <div className="w-full h-full bg-[#121214] flex flex-col justify-between text-[#F0F0F0] select-none p-2 sm:p-3 font-mono overflow-hidden">
-      <div className="flex items-center justify-between border-b border-neutral-800 pb-1.5 text-[9px]">
-        <div className="flex items-center gap-1.5 font-bold text-indigo-400">
-          <Database className="w-2.5 h-2.5 text-indigo-400" />
-          <span>CLOUD PIPELINE</span>
-        </div>
-        <span className="text-emerald-400 text-[8px]">SYNC 200 OK</span>
-      </div>
-
-      <div className="my-2 p-1.5 rounded bg-neutral-900 border border-neutral-800 flex items-center justify-between text-[8px]">
-        <span className="text-white">React Native</span>
-        <span className="text-neutral-500">→</span>
-        <span className="text-white">Supabase</span>
-        <span className="text-neutral-500">→</span>
-        <span className="text-white">n8n Hook</span>
-      </div>
-
-      <div className="flex items-center justify-between text-[7px] text-neutral-400">
-        <span>MS SQL SYNC</span>
-        <span className="text-emerald-400">LATENCY 42ms</span>
-      </div>
-    </div>
-  );
-}
-
 /* =========================================================================
    2. LAPTOP FRAME MOCKUP (Optimized with Next.js Image & Exact Screen Fit)
    ========================================================================= */
@@ -115,10 +88,7 @@ export function LaptopMockup({
               priority={isEnlarged}
             />
           ) : (
-            <>
-              {id === "solarx" && <SolarXScreen />}
-              {id === "fullstack-mobile" && <CloudSuiteScreen />}
-            </>
+            <>{id === "solarx" && <SolarXScreen />}</>
           )}
         </div>
       </div>

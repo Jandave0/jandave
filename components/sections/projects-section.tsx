@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { ChevronRight, PlusIcon } from "lucide-react";
 import { Cursor } from "@/components/motion/cursor";
 import { ProjectCard } from "@/components/portfolio/project-card";
@@ -10,11 +9,30 @@ import { personalProjects } from "@/data/projects";
 export function ProjectsSection() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [isHoveringProject, setIsHoveringProject] = useState(false);
+  const leaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const projectsContainerRef = useRef<HTMLDivElement>(null);
 
   const displayedProjects = showAllProjects
     ? personalProjects
     : [personalProjects[0]];
+
+  const handleProjectEnter = () => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+      leaveTimerRef.current = null;
+    }
+    setIsHoveringProject(true);
+  };
+
+  const handleProjectLeave = () => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+    }
+    // Small buffer prevents cursor badge from flickering when transitioning across card margins
+    leaveTimerRef.current = setTimeout(() => {
+      setIsHoveringProject(false);
+    }, 60);
+  };
 
   return (
     <section id="projects" className="space-y-4">
@@ -45,43 +63,24 @@ export function ProjectsSection() {
         <Cursor
           attachToParent
           variants={{
-            initial: { scale: 0.3, opacity: 0 },
+            initial: { scale: 0.4, opacity: 0 },
             animate: {
               scale: isHoveringProject ? 1 : 0,
               opacity: isHoveringProject ? 1 : 0,
             },
-            exit: { scale: 0.3, opacity: 0 },
-          }}
-          springConfig={{
-            bounce: 0.001,
+            exit: { scale: 0.4, opacity: 0 },
           }}
           transition={{
-            ease: "easeInOut",
-            duration: 0.15,
+            type: "spring",
+            stiffness: 400,
+            damping: 26,
+            mass: 0.1,
           }}
         >
-          <motion.div
-            animate={{
-              width: isHoveringProject ? 80 : 16,
-              height: isHoveringProject ? 32 : 16,
-            }}
-            className="flex items-center justify-center rounded-[24px] bg-gray-500/40 backdrop-blur-md dark:bg-gray-300/40"
-          >
-            <AnimatePresence>
-              {isHoveringProject ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.6 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.6 }}
-                  className="inline-flex w-full items-center justify-center"
-                >
-                  <div className="inline-flex items-center text-sm font-medium text-white dark:text-black">
-                    More <PlusIcon className="ml-1 h-4 w-4" />
-                  </div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-          </motion.div>
+          <div className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-neutral-900/85 dark:bg-neutral-100/90 text-white dark:text-neutral-900 text-xs font-semibold shadow-lg backdrop-blur-md border border-white/20 dark:border-black/10 select-none whitespace-nowrap pointer-events-none">
+            <span>More</span>
+            <PlusIcon className="w-3.5 h-3.5" />
+          </div>
         </Cursor>
 
         <div className="space-y-4">
@@ -89,8 +88,8 @@ export function ProjectsSection() {
             <ProjectCard
               key={project.id}
               project={project}
-              onMouseEnter={() => setIsHoveringProject(true)}
-              onMouseLeave={() => setIsHoveringProject(false)}
+              onMouseEnter={handleProjectEnter}
+              onMouseLeave={handleProjectLeave}
             />
           ))}
         </div>

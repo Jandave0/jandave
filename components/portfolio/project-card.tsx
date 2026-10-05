@@ -44,6 +44,7 @@ export function ProjectCard({
           data-project-card="true"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          onClick={onMouseLeave}
           className="w-full p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-6"
         >
           {/* Left Column: Clean Title, Subtitle, and Link Pill */}

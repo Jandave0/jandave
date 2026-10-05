@@ -20,6 +20,45 @@ export interface Project {
 
 export const personalProjects: Project[] = [
   {
+    id: "aurelia",
+    title: "Maison Aurelia Milano",
+    subtitle: "Haute Couture & Luxury E-Commerce Platform",
+    linkDomain: "aurelia-three-rouge.vercel.app",
+    liveUrl: "https://aurelia-three-rouge.vercel.app/",
+    githubUrl: "https://github.com/Jandave0",
+    period: "2026",
+    image: "/ecommerce.jpg",
+    description:
+      "A modern luxury high-fashion e-commerce web application for Maison Aurelia Milano, an artisanal Florentine fashion house. The platform pairs editorial runway aesthetics with high-performance serverless architecture.",
+    tags: [
+      "Next.js 16",
+      "React 19",
+      "Tailwind CSS v4",
+      "Neon Postgres",
+      "Drizzle ORM",
+      "Better Auth",
+      "TypeScript",
+    ],
+    isFlagship: true,
+    features: [
+      {
+        title: "Editorial Vitrine & Runway",
+        description:
+          "Immersive lookbooks, curated product showcases, and craftsmanship detail pages with fluid editorial interactions.",
+      },
+      {
+        title: "Client Salon & Concierge",
+        description:
+          "Customer account portal (/account), private fitting appointment bookings, and live catalog search (Ctrl+K).",
+      },
+      {
+        title: "Atelier Operations & Shopping Bag",
+        description:
+          "Protected admin console (/admin) for catalog monitoring, stock validation, persistent sliding bag drawer, and full cart checkout.",
+      },
+    ],
+  },
+  {
     id: "dormeats",
     title: "DormEats",
     subtitle: "Student Meal Discovery & Recipe Platform",
@@ -83,35 +122,6 @@ export const personalProjects: Project[] = [
         title: "ESP32 Microcontroller Architecture",
         description:
           "Direct sensor integration over I2C (INA219 current sensor) and PWM servo control.",
-      },
-    ],
-  },
-  {
-    id: "fullstack-mobile",
-    title: "Cloud Automation Suite",
-    subtitle: "Cross-Platform Client & Webhook Sync",
-    linkDomain: "cloud-sync.app",
-    liveUrl: "https://github.com/Jandave0",
-    githubUrl: "https://github.com/Jandave0",
-    period: "2025",
-    description:
-      "Cross-platform client integrated with Supabase realtime channels and n8n background workflows for automated task orchestration and MS SQL Server syncing.",
-    tags: ["React Native", "Supabase", "n8n Automation", "MS SQL Server", "REST APIs"],
-    features: [
-      {
-        title: "Cross-Platform Realtime Sync",
-        description:
-          "Built with React Native and Supabase realtime channels for instant bidirectional record propagation.",
-      },
-      {
-        title: "n8n Background Task Automation",
-        description:
-          "Self-hosted webhook pipelines triggering automated data transformations and SLA monitoring alerts.",
-      },
-      {
-        title: "Enterprise Database Integration",
-        description:
-          "Seamless connectivity and replication with on-premise MS SQL Server instances.",
       },
     ],
   },

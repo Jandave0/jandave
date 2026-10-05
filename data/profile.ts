@@ -16,8 +16,8 @@ export interface ProfileData {
 export const profileData: ProfileData = {
   name: "Jan King Dave F. Salas",
   headline:
-    "Third-year Information Technology student bridging hardware telemetry with scalable cloud backends, modern web applications, and structured AI context engineering.",
-  status: "Available for Internships",
+    "Full-Stack Developer / Mobile App Developer / IT Student",
+  status: "Available for Work or Freelance",
   location: "Calauag, Quezon, Philippines",
   avatarUrl: "/babid.jpg",
   resumePdfUrl: "/Salas_resumee.pdf",
@@ -26,8 +26,8 @@ export const profileData: ProfileData = {
   phone: "09272056612",
   phoneDisplay: "+63 927 205 6612",
   aboutParagraphs: [
-    "I am a third-year Information Technology student at the Polytechnic University of the Philippines (PUP Lopez Campus) with hands-on experience in full-stack web development, IoT systems architecture, and mobile applications.",
-    "My engineering work bridges hardware telemetry with scalable cloud backends, such as designing single-axis solar tracking algorithms on ESP32 microcontrollers and automating data pipelines. I apply deliberate, context-driven engineering with AI coding tools (Gemini CLI, Antigravity) to produce reliable, production-ready software.",
+    "I am a third-year Information Technology student at the Polytechnic University of the Philippines (PUP Lopez Campus) specializing in full-stack web development and cross-platform mobile applications. I design and engineer end-to-end digital products from responsive, accessible web interfaces in Next.js and React to fluid mobile experiences with React Native.",
+    "My development workflow focuses on clean component architecture, intuitive UI interactions, and robust backend integrations with modern databases, ORMs, and REST APIs. I combine deliberate software engineering principles with AI-augmented workflows to rapidly build and ship polished, production-grade applications across web and mobile platforms.",
   ],
   skills: [
     "TypeScript",

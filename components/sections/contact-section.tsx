@@ -20,7 +20,7 @@ export function ContactSection() {
           Get in Touch
         </h2>
         <p className="text-xs sm:text-sm text-[#707070] dark:text-[#B0B0B0] leading-relaxed">
-          Want to chat? Just shoot me an email or reach out on GitHub. I&apos;m always open to discussing new internship opportunities, IoT projects, or engineering collaborations.
+          Want to chat? Just shoot me an email or reach out on GitHub. I&apos;m always open to discussing new work, freelance projects, or engineering collaborations.
         </p>
       </div>
 

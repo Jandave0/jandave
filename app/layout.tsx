@@ -19,15 +19,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jan King Dave F. Salas | Full-Stack Developer & IoT Engineer",
+  title: "Jan King Dave F. Salas | Full-Stack Web & Mobile Developer",
   description:
-    "Portfolio of Jan King Dave F. Salas — Full-Stack Web Developer, IoT Architect, and 3rd-year IT student at PUP Lopez.",
+    "Portfolio of Jan King Dave F. Salas — Full-Stack Web & Mobile Developer, and IT student at PUP Lopez.",
   keywords: [
     "Jan King Dave Salas",
     "Portfolio",
     "Full-Stack Developer",
-    "IoT",
-    "ESP32",
+    "Web Developer",
+    "Mobile Developer",
+    "React Native",
     "TypeScript",
     "Next.js",
   ],
